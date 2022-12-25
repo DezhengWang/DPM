@@ -27,11 +27,11 @@ class BasicConv2d(nn.Module):
         return x
 
 class LcnBlock(nn.Module):
-    def __init__(self, args, layers, kernel=3):
+    def __init__(self, args, kernel=3):
         super(LcnBlock, self).__init__()
         self.hidC = args.hidCNN
         self.basic = nn.Sequential(BasicConv2d(1, self.hidC, (kernel, kernel)))
-        for i in range(layers-1):
+        for i in range(args.num_lcn-1):
             self.basic.add_module("{}".format(i+1), BasicConv2d(self.hidC, self.hidC, (kernel, kernel)))
     def forward(self, x):
         x = self.basic(x)
@@ -110,8 +110,7 @@ class Model(nn.Module):
         self.hidC = args.hidCNN
         self.hidR = args.hidRNN
         self.kernel_l = 3
-        num_lcn = args.num_lcn
-        self.lcn = LcnBlock(args, num_lcn, self.kernel_l)
+        self.lcn = LcnBlock(args, self.kernel_l)
         self.t_net_l = TemporalBlock(self.hidC, self.hidR, kernel_size=(1, self.f-num_lcn*(self.kernel_l-1)))
 
         self.mhcn = MhcnBlock(args)
