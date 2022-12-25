@@ -90,8 +90,8 @@ class Model(nn.Module):
         self.hw = args.highway_window
         self.hidC = args.hidCNN
         self.hidR = args.hidRNN
-        self.kernel_l = 3  # PM2.5 5  Rate 2 NASDAQ 3
-        self.c_net_l = BasicConv2d(1, self.hidC, (self.kernel_l, self.kernel_l))  # 3 3
+        self.kernel_l = 3  
+        self.c_net_l = BasicConv2d(1, self.hidC, (self.kernel_l, self.kernel_l))  
         self.t_net_l = TemporalBlock(self.hidC, self.hidR, kernel_size=(1, self.f-self.kernel_l+1))
 
         self.inception = Inception(args)
