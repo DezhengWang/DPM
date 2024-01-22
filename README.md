@@ -1,1 +1,1 @@
-# DPLSMNet: Dual Pattern Long- and Short-term Memory Network for Forecasting Time Series
+# MPM: Multi Patterns Memory Model for Short-term  Time Series Forecasting
