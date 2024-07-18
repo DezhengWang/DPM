@@ -26,9 +26,9 @@ class BasicConv2d(nn.Module):
         x = self.relu(x)
         return x
 
-class LcnBlock(nn.Module):
+class SMB(nn.Module):
     def __init__(self, args, kernel=3):
-        super(LcnBlock, self).__init__()
+        super(SMB, self).__init__()
         self.hidC = args.hidCNN
         self.basic = nn.Sequential(BasicConv2d(1, self.hidC, (kernel, kernel)))
         for i in range(args.num_lcn-1):
@@ -37,9 +37,9 @@ class LcnBlock(nn.Module):
         x = self.basic(x)
         return x
 
-class MhcnBlock(nn.Module):
+class LMB(nn.Module):
     def __init__(self, args):
-        super(MhcnBlock, self).__init__()
+        super(LMB, self).__init__()
         self.units = args.units
         self.branchs = []
         if self.units[0]:
@@ -110,10 +110,10 @@ class Model(nn.Module):
         self.hidC = args.hidCNN
         self.hidR = args.hidRNN
         self.kernel_l = 3
-        self.lcn = LcnBlock(args, self.kernel_l)
+        self.lcn = LMB(args, self.kernel_l)
         self.t_net_l = TemporalBlock(self.hidC, self.hidR, kernel_size=(1, self.f-args.num_lcn*(self.kernel_l-1)))
 
-        self.mhcn = MhcnBlock(args)
+        self.mhcn = LMB(args)
         self.t_net_m = TemporalBlock(self.hidC, self.hidR, kernel_size=(1, sum(args.units)*self.f))
 
         self.dropout = nn.Dropout(p=args.dropout)
